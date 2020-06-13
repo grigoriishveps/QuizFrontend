@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class CreateQuiz extends React.Component{
+export default class OneOption extends React.Component{
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);

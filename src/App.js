@@ -4,7 +4,7 @@ import './App.css';
 import axios from 'axios';
 import CreateQuiz from './CreateQuiz';
 import AuthenticationWindow from "./AuthenticationWindow";
-
+import PagingQuiz from "./PagingQuiz";
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -30,13 +30,16 @@ class App extends React.Component {
         const sdata = btoa(this.state.email +
             ':' + this.state.password);
         const logInfo = {headers: {"Authorization": "Basic " + sdata}};
-        console.log(logInfo)
+        console.log(logInfo);
         return (
             <div className="App">
                 <header className="App-header" align="center">
                     {a
-                        ? <CreateQuiz authHeader ={logInfo} />
-                        : <AuthenticationWindow successLoginFunc={this.changeDataAfterLogin}/>}
+                        //? <CreateQuiz authHeader ={logInfo} />
+                        ?<PagingQuiz authHeader ={logInfo}/>
+                        : <AuthenticationWindow successLoginFunc={this.changeDataAfterLogin}/>
+
+                    }
                 </header>
             </div>
         );

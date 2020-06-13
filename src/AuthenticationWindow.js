@@ -14,6 +14,7 @@ export default class AuthenticationWindow extends React.Component{
         this.handlePassword = this.handlePassword.bind(this);
         this.handleClickRegister = this.handleClickRegister.bind(this);
         this.handleClickLogin = this.handleClickLogin.bind(this);
+        this.handleClickLogin();
     }
 
 
@@ -43,7 +44,6 @@ export default class AuthenticationWindow extends React.Component{
     }
 //
     render() {
-
         return (
             <div className="authwindow">
                 <div className="input-group input-group-sm mb-3 ">
