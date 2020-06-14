@@ -16,8 +16,9 @@ export default class Quiz extends React.Component{
     }
 
     solveQuiz(){
-        const array = this.state.answer.split(",");
-        const answer = array.map((item)=>Number(item)-1);
+        let array = this.state.answer.split(",").filter((item)=>item!=="");
+        console.log(array);
+        let answer = array.map((item)=> Number(item)-1);
         console.log(answer);
         axios.post("http://localhost:8889/api/quizzes/"+this.props.question.id+"/solve", {answer}, this.props.authHeader)
             .then((response) => console.log(response))
