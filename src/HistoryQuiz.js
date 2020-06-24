@@ -13,35 +13,12 @@ export default class HistoryQuiz extends React.Component {
             infoPage: info,
             f: false
         };
-        // this.addNewOption = this.addNewOption.bind(this);
-        // this.changeValueArray = this.changeValueArray.bind(this);
-        this.getPrevPage = this.getPrevPage.bind(this);
-        // this.handleChangeTitle = this.handleChangeTitle.bind(this);
-        this.getNextPage = this.getNextPage.bind(this);
-        // this.handleChangeText = (event) => this.setState({text: event.target.value});
+
+        this.getPage = this.getPage.bind(this);
+
 
     }
 
-    // addNewOption() {
-    //     this.setState((state) => {
-    //             let a = state.options.slice();
-    //             a.push('');
-    //             return {options: a};
-    //         }
-    //     );
-    // }
-    //
-    // changeValueArray(index, value) {
-    //     this.setState((state) => {
-    //         let a = state.options.slice();
-    //         a[index] = value;
-    //         return {options: a};
-    //     });
-    // }
-    //
-    // handleChangeTitle(event) {
-    //     this.setState({title: event.target.value});
-    // }
 
     componentWillMount() {
         axios.get("http://localhost:8889/api/quizzes/completed",  this.props.authHeader)
@@ -50,22 +27,53 @@ export default class HistoryQuiz extends React.Component {
             .catch((response) => console.log(response));
     }
 
-    getPrevPage(index, onOrOff) {
-        console.log(this.props.authHeader);
-        axios.get("http://localhost:8889/api/quizzes/completed", this.props.authHeader)
-            .then((response) => this.setState({infoPage:response.data, f:true}))
-            .catch((response) => console.log(response));
-    }
-    getNextPage() {
+
+    getPage() {
         console.log(this.props.authHeader);
         axios.get("http://localhost:8889/api/quizzes/completed", this.props.authHeader)
             .then((response) => this.setState({infoPage:response.data, f:true}))
             .catch((response) => console.log(response));
     }
 
+    createNavPage(){
+        const currentNum = this.state.infoPage.number;
+        const numOp = this.state.num;
+        return (<nav aria-label="...">
+            <ul className="pagination justify-content-center">
+                <li className= {"page-item "+((this.state.infoPage.first)?"disabled":"")}>
+                    {this.state.infoPage.first ? <span className="page-link">Prev</span>
+                        : <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>Prev</a>}
+                </li>
+
+                {/*Предыдущая страница*/}
+                {!this.state.infoPage.first && <li className="page-item">
+                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>{currentNum}</a>
+                </li>}
+
+                {/*Текущая страница*/}
+                <li className="page-item active" aria-current="page">
+                            <span className="page-link">
+                                {currentNum+1}
+                                <span className="sr-only">(current)</span>
+                            </span>
+                </li>
+
+                {/*Следующая страница*/}
+                {!this.state.infoPage.last && <li className="page-item">
+                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum+1)}>{currentNum+2} </a>
+                </li>}
+
+                <li className={"page-item "+((this.state.infoPage.last)?"disabled":"")}>
+                    {this.state.infoPage.last ?<span className="page-link">Next</span>
+                        : <a className="page-link" href="#" onClick={this.getPage.bind(this,currentNum+1)}>Next</a>}
+                </li>
+            </ul>
+        </nav>)
+    }
 
     render() {
         let op=(this.state.f? this.state.infoPage.content.map((item)=> (<tr><td>{item.id}</td><td>{item.completedAt}</td></tr>)):null);
+        let navPanel = this.createNavPage();
         return (
             <div className="">
                 <table className="table">
@@ -79,24 +87,7 @@ export default class HistoryQuiz extends React.Component {
                         {op}
                     </tbody>
                 </table>
-                <nav aria-label="...">
-                    <ul className="pagination justify-content-center">
-                        <li className="page-item disabled">
-                            <a className="page-link" href="#" onClick={this.getPrevPage}>Prev</a>
-                        </li>
-                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                        <li className="page-item active" aria-current="page">
-                          <span className="page-link">
-                            2
-                            <span className="sr-only">(current)</span>
-                          </span>
-                        </li>
-                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                        <li className="page-item">
-                            <a className="page-link" href="#" onClick={this.getNextPage}>Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                {navPanel}
             </div>
         );
     }

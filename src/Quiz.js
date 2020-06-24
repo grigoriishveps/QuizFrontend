@@ -27,7 +27,8 @@ export default class Quiz extends React.Component{
 
 //<img src="" className="card-img-top" alt=""/>
     render() {
-        let a = this.props.question.options.map((item)=><li text-align="left">{item}</li>);
+        let a = this.props.question.options.map((item,index)=><li key={this.props.question.id+"-option-"+index} text-align="left">{item}</li>);
+
         return (
             <div className="card text-white bg-success border-info" style={{width: "18rem"}}>
             {/*//style={{width: "18rem"}}*/}

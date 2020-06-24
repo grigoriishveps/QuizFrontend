@@ -53,8 +53,6 @@ class App extends React.Component {
                 break;
         }
 
-
-
         return (
             <div className="App">
                 <nav className="site-header sticky-top py-1">
