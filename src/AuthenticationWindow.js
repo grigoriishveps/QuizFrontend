@@ -1,5 +1,4 @@
 import React from 'react';
-import OneOption from "./OneOption";
 import './App.css';
 import axios from 'axios';
 export default class AuthenticationWindow extends React.Component{

@@ -32,6 +32,9 @@ export default class OneOption extends React.Component{
                         </div>
                     </div>
                     <input type="text" value={this.props.value} onChange={this.handleChange} className="form-control" aria-label="Text input with checkbox"/>
+                    {this.props.last&&<button type="button" className="ml-2 mb-1 text-danger close"  aria-label="Close"  onClick={this.props.deleteFunc}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>}
                 </div>
 
             </div>
