@@ -34,7 +34,7 @@ export default class PagingQuiz extends React.Component {
 //         {"id":102,"title":"Test 1","text":"Text 1","options":["a","b"]}}
 
     componentWillMount() {
-        axios.get("http://localhost:8889/api/quizzes?pageSize=3",  this.props.authHeader)
+        axios.get("http://localhost:8080/api/quizzes?pageSize=3",  this.props.authHeader)
             .then((response) => {this.setState({infoPage:response.data});
                 console.log(response);})
             .catch((response) => console.log(response));
@@ -42,7 +42,7 @@ export default class PagingQuiz extends React.Component {
 
     getPage(index) {
         console.log(this.props.authHeader);
-        axios.get("http://localhost:8889/api/quizzes?page="+index+"&pageSize=3", this.props.authHeader)
+        axios.get("http://localhost:8080/api/quizzes?page="+index+"&pageSize=3", this.props.authHeader)
             .then((response) => this.setState(state=>{return{infoPage:response.data, f:true, num: state.num+1}}))
             .catch((response) => console.log(response));
     }

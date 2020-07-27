@@ -25,7 +25,7 @@ export default class AuthenticationWindow extends React.Component{
     }
 
     handleClickRegister(event){
-        axios.post('http://localhost:8889/api/register', this.state)
+        axios.post('http://localhost:8080/api/register', this.state)
             .then((response) => {
             console.log(response);})
             .catch((response) => console.log(response));
@@ -36,7 +36,7 @@ export default class AuthenticationWindow extends React.Component{
         ':' + this.state.password);
         const s ={"Authorization": "Basic " + a}
         console.log(s);
-        axios.get('http://localhost:8889/login', {"headers": {"Authorization": "Basic " + a}})
+        axios.get('http://localhost:8080/login', {"headers": {"Authorization": "Basic " + a}})
             .then((response) => {console.log("Успешно авторизован"); this.props.successLoginFunc(this.state.email, this.state.password);})
             .catch((response) => console.log(response));
 

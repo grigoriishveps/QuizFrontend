@@ -61,7 +61,7 @@ export default class CreateQuiz extends React.Component{
 
     sendQuiz(){
         console.log(this.props.authHeader);
-        axios.post("http://localhost:8889/api/quizzes", this.state, this.props.authHeader)
+        axios.post("http://localhost:8080/api/quizzes", this.state, this.props.authHeader)
             .then((response) => {console.log(response);
             this.setState(state=>{return{
                 title:'',

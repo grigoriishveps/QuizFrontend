@@ -20,7 +20,7 @@ export default class Quiz extends React.Component{
         console.log(array);
         let answer = array.map((item)=> Number(item)-1);
         console.log(answer);
-        axios.post("http://localhost:8889/api/quizzes/"+this.props.question.id+"/solve", {answer}, this.props.authHeader)
+        axios.post("http://localhost:8080/api/quizzes/"+this.props.question.id+"/solve", {answer}, this.props.authHeader)
             .then((response) => console.log(response))
             .catch((response) => console.log(response));
     }

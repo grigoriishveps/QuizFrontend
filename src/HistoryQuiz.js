@@ -21,7 +21,7 @@ export default class HistoryQuiz extends React.Component {
 
 
     componentWillMount() {
-        axios.get("http://localhost:8889/api/quizzes/completed",  this.props.authHeader)
+        axios.get("http://localhost:8080/api/quizzes/completed",  this.props.authHeader)
             .then((response) => {this.setState({infoPage:response.data, f:true});
                 console.log(response);})
             .catch((response) => console.log(response));
@@ -30,7 +30,7 @@ export default class HistoryQuiz extends React.Component {
 
     getPage() {
         console.log(this.props.authHeader);
-        axios.get("http://localhost:8889/api/quizzes/completed", this.props.authHeader)
+        axios.get("http://localhost:8080/api/quizzes/completed", this.props.authHeader)
             .then((response) => this.setState({infoPage:response.data, f:true}))
             .catch((response) => console.log(response));
     }
