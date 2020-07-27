@@ -1,23 +1,20 @@
 import React from 'react';
-import OneOption from "./OneOption";
 import axios from 'axios';
 import './App.css';
+import {connect} from "react-redux";
+import mapStateToProps from "./redux/mapStateToProps";
+import mapDispatchToProps from "./redux/mapDispatchToProps";
 import Quiz from "./Quiz";
+import {Redirect} from "react-router-dom";
 
-export default class PagingQuiz extends React.Component {
+class PagingQuiz extends React.Component {
     constructor(props) {
         super(props);
-        console.log("Начало");
-        let info = {};
-
-        console.log(info);
         this.state = {
-            infoPage: info,
-            f: false,
+            infoPage: {},
             num: 1
         };
         this.getPage = this.getPage.bind(this);
-        // this.handleChangeText = (event) => this.setState({text: event.target.value});
         this.formPageQuiz = this.formPageQuiz.bind(this);
     }
 // {    "totalPages":1,
@@ -33,7 +30,8 @@ export default class PagingQuiz extends React.Component {
 //     "content":[
 //         {"id":102,"title":"Test 1","text":"Text 1","options":["a","b"]}}
 
-    componentWillMount() {
+    componentDidMount() {
+        if (this.props.isLogin)
         axios.get("http://localhost:8080/api/quizzes?pageSize=3",  this.props.authHeader)
             .then((response) => {this.setState({infoPage:response.data});
                 console.log(response);})
@@ -50,34 +48,38 @@ export default class PagingQuiz extends React.Component {
     formPageQuiz(){
         let k = 0, i = -1, j = 3;
         let arrayOfQuiz = [];
-        const ff = this.state.f;
+
         const numOp = this.state.num;
         while(k < this.state.infoPage.numberOfElements){
-            if (j == 3){
+            if (j === 3){
                 i++;
                 j = 0;
             }
-            arrayOfQuiz.push(<div className="card-deck col mb-3" key={"card-"+numOp+"-" +k}><Quiz  authHeader={this.props.authHeader} question={this.state.infoPage.content[k]}/></div>);
+            arrayOfQuiz.push(<div className="card-deck col mb-3" key={'card-${numOp}-${k}'}>
+                <Quiz question={this.state.infoPage.content[k]}/></div>);
             k++;
             j++;
         }
-        console.log(arrayOfQuiz);
+        //console.log(arrayOfQuiz);
         return arrayOfQuiz;
     }
 
     createNavPage(){
         const currentNum = this.state.infoPage.number;
         const numOp = this.state.num;
-        return (<nav aria-label="...">
+        if (!this.props.isLogin)
+            return(<Redirect to="/auth"/>)
+        return (
+            <nav aria-label="...">
             <ul className="pagination justify-content-center">
                 <li className= {"page-item "+((this.state.infoPage.first)?"disabled":"")}>
                     {this.state.infoPage.first ? <span className="page-link">Prev</span>
-                        : <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>Prev</a>}
+                        : <button className="page-link" onClick={this.getPage.bind(this, currentNum-1)}>Prev</button>}
                 </li>
 
                 {/*Предыдущая страница*/}
                 {!this.state.infoPage.first && <li className="page-item">
-                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>{currentNum}</a>
+                    <button className="page-link" onClick={this.getPage.bind(this, currentNum-1)}>{currentNum}</button>
                 </li>}
 
                 {/*Текущая страница*/}
@@ -90,26 +92,23 @@ export default class PagingQuiz extends React.Component {
 
                 {/*Следующая страница*/}
                 {!this.state.infoPage.last && <li className="page-item">
-                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum+1)}>{currentNum+2} </a>
+                    <button className="page-link" onClick={this.getPage.bind(this, currentNum+1)}>{currentNum+2} </button>
                 </li>}
 
                 <li className={"page-item "+((this.state.infoPage.last)?"disabled":"")}>
                     {this.state.infoPage.last ?<span className="page-link">Next</span>
-                        : <a className="page-link" href="#" onClick={this.getPage.bind(this,currentNum+1)}>Next</a>}
+                        : <button className="page-link" onClick={this.getPage.bind(this,currentNum+1)}>Next</button>}
                 </li>
             </ul>
         </nav>)
     }
 
     render() {
-
         let op= this.formPageQuiz();
         let navPanel = this.createNavPage();
         return (
             <div className="paging-quiz">
-
                 <h2> Все задания </h2>
-                {/*<div className="card-deck">*/}
                 <div className=" row row-cols-1 row-cols-md-3">
                     {op}
                 </div>
@@ -118,3 +117,5 @@ export default class PagingQuiz extends React.Component {
         );
     }
 }
+export default connect(mapStateToProps("PagingQuiz"), mapDispatchToProps("PagingQuiz")) (PagingQuiz);
+//export default connect(mapStateToProps("PagingQuiz")) (PagingQuiz);

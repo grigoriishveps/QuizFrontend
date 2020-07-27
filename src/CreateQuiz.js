@@ -1,8 +1,11 @@
 import React from 'react';
 import OneOption from "./OneOption";
 import axios from 'axios';
+import {connect} from "react-redux";
+import mapStateToProps from "./redux/mapStateToProps";
+// import mapDispatchToProps from "./redux/mapDispatchToProps";
 import './App.css';
-export default class CreateQuiz extends React.Component{
+class CreateQuiz extends React.Component{
     constructor(props) {
         super(props);
         this.state={
@@ -117,3 +120,6 @@ export default class CreateQuiz extends React.Component{
         );
     }
 }
+
+//export default connect(mapStateToProps("CreateQuiz"), mapDispatchToProps("CreateQuiz")) (CreateQuiz);
+export default connect(mapStateToProps("CreateQuiz")) (CreateQuiz);

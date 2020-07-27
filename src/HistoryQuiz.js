@@ -1,10 +1,11 @@
 import React from 'react';
-import OneOption from "./OneOption";
 import axios from 'axios';
 import './App.css';
-import Quiz from "./Quiz";
+import {connect} from "react-redux";
+import mapStateToProps from "./redux/mapStateToProps";
+import mapDispatchToProps from "./redux/mapDispatchToProps";
 
-export default class HistoryQuiz extends React.Component {
+class HistoryQuiz extends React.Component {
     constructor(props) {
         super(props);
         console.log("Начало");
@@ -15,12 +16,9 @@ export default class HistoryQuiz extends React.Component {
         };
 
         this.getPage = this.getPage.bind(this);
-
-
     }
 
-
-    componentWillMount() {
+    componentDidMount() {
         axios.get("http://localhost:8080/api/quizzes/completed",  this.props.authHeader)
             .then((response) => {this.setState({infoPage:response.data, f:true});
                 console.log(response);})
@@ -42,12 +40,12 @@ export default class HistoryQuiz extends React.Component {
             <ul className="pagination justify-content-center">
                 <li className= {"page-item "+((this.state.infoPage.first)?"disabled":"")}>
                     {this.state.infoPage.first ? <span className="page-link">Prev</span>
-                        : <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>Prev</a>}
+                        : <button className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>Prev</button>}
                 </li>
 
                 {/*Предыдущая страница*/}
                 {!this.state.infoPage.first && <li className="page-item">
-                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>{currentNum}</a>
+                    <button className="page-link" href="#" onClick={this.getPage.bind(this, currentNum-1)}>{currentNum}</button>
                 </li>}
 
                 {/*Текущая страница*/}
@@ -60,12 +58,12 @@ export default class HistoryQuiz extends React.Component {
 
                 {/*Следующая страница*/}
                 {!this.state.infoPage.last && <li className="page-item">
-                    <a className="page-link" href="#" onClick={this.getPage.bind(this, currentNum+1)}>{currentNum+2} </a>
+                    <button className="page-link" href="#" onClick={this.getPage.bind(this, currentNum+1)}>{currentNum+2} </button>
                 </li>}
 
                 <li className={"page-item "+((this.state.infoPage.last)?"disabled":"")}>
                     {this.state.infoPage.last ?<span className="page-link">Next</span>
-                        : <a className="page-link" href="#" onClick={this.getPage.bind(this,currentNum+1)}>Next</a>}
+                        : <button className="page-link" onClick={this.getPage.bind(this,currentNum+1)}>Next</button>}
                 </li>
             </ul>
         </nav>)
@@ -92,3 +90,4 @@ export default class HistoryQuiz extends React.Component {
         );
     }
 }
+export default connect(mapStateToProps("HistoryQuiz"), mapDispatchToProps("HistoryQuiz")) (HistoryQuiz);

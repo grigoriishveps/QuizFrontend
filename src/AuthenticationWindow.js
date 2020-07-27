@@ -1,7 +1,11 @@
 import React from 'react';
 import './App.css';
+import {Redirect} from "react-router-dom"
 import axios from 'axios';
-export default class AuthenticationWindow extends React.Component{
+import {connect} from "react-redux";
+import mapStateToProps from "./redux/mapStateToProps";
+import mapDispatchToProps from "./redux/mapDispatchToProps";
+class AuthenticationWindow extends React.Component{
     constructor(props) {
         super(props);
         this.state={
@@ -13,9 +17,11 @@ export default class AuthenticationWindow extends React.Component{
         this.handlePassword = this.handlePassword.bind(this);
         this.handleClickRegister = this.handleClickRegister.bind(this);
         this.handleClickLogin = this.handleClickLogin.bind(this);
-        this.handleClickLogin();
-    }
 
+    }
+    componentDidMount() {
+        //this.handleClickLogin();
+    }
 
     handleLogin(event){
         this.setState({email:event.target.value});
@@ -32,17 +38,17 @@ export default class AuthenticationWindow extends React.Component{
     }
 
     handleClickLogin(){
-        const a = btoa(this.state.email +
-        ':' + this.state.password);
-        const s ={"Authorization": "Basic " + a}
+        const s ={"Authorization": "Basic " + btoa(this.state.email +
+                ':' + this.state.password)}
         console.log(s);
-        axios.get('http://localhost:8080/login', {"headers": {"Authorization": "Basic " + a}})
-            .then((response) => {console.log("Успешно авторизован"); this.props.successLoginFunc(this.state.email, this.state.password);})
+        axios.get('http://localhost:8080/login', {"headers": {s}})
+            .then((response) => {console.log("Успешно авторизован"); this.props.actionLogin({...this.state});this.props.location.pathname = '/new';})
             .catch((response) => console.log(response));
-
     }
-//
+
     render() {
+        if (this.props.isLogin)
+            return(<Redirect to="/"/>)
         return (
             <div className="authwindow">
                 <div className="input-group input-group-sm mb-3 ">
@@ -68,3 +74,5 @@ export default class AuthenticationWindow extends React.Component{
         );
     }
 }
+
+export default connect(mapStateToProps("AuthenticationWindow"), mapDispatchToProps("AuthenticationWindow")) (AuthenticationWindow);

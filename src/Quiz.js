@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from "axios";
+import {connect} from "react-redux";
+import mapStateToProps from "./redux/mapStateToProps";
 
-export default class Quiz extends React.Component{
+class Quiz extends React.Component{
     constructor(props) {
         super(props);
         this.state={
@@ -54,3 +56,4 @@ export default class Quiz extends React.Component{
         );
     }
 }
+export default connect(mapStateToProps("Quiz")) (Quiz);
