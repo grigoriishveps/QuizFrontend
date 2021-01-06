@@ -35,7 +35,7 @@
     "redux": "4.0.5",
     "lodash": "latest",
     "react-router-dom": "5.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "react-redux": "7.2.1"
   },
   "devDependencies": {
